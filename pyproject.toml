@@ -1,0 +1,20 @@
+[project]
+name = "health-simplified-cli"
+version = "0.1.0"
+description = "A CLI tool to track nutrition and meals"
+authors = [
+    { name="Your Name", email="you@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "typer[all]",
+    "sqlalchemy"
+]
+
+[project.scripts]
+myapp = "cli.main:app"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
