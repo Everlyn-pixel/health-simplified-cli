@@ -7,8 +7,10 @@ def set_goal(user_name, daily, weekly):
     user = db.query(User).filter(User.name == user_name).first()
     if not user:
         print("User not found.")
+        db.close()
         return
-    goal = Goal(user_id=user.id, daily=daily, weekly=weekly)
+    # Provide a default name for the goal
+    goal = Goal(user_id=user.id, name="Calorie Goal", daily=daily, weekly=weekly)
     db.add(goal)
     db.commit()
     print("✅ Goal set.")

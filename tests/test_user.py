@@ -1,11 +1,13 @@
 from models.user import User
 from sqlalchemy.orm import Session
+import uuid
 
 def test_user_placeholder():
     assert True
 
 def test_create_user(test_db: Session):
-    user = User(name="Test User", email="test@example.com")
+    unique_email = f"test_{uuid.uuid4()}@example.com"
+    user = User(name="Test User", email=unique_email)
     test_db.add(user)
     test_db.commit()
     test_db.refresh(user)

@@ -1,0 +1,1 @@
+# File removed. Use models in the models/ package (e.g., models/user.py, models/entry.py, etc.).

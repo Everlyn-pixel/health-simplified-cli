@@ -7,7 +7,7 @@ from database.setup import SessionLocal
 analytics_app = typer.Typer()
 
 @analytics_app.command()
-def summary(user_id: int):
+def summary(user_id: int = typer.Argument(..., help="User ID to summarize entries for.")):
     """Generate a summary report for a user's entries."""
     session = SessionLocal()
     entries = session.query(Entry).filter(Entry.user_id == user_id).all()
@@ -16,20 +16,29 @@ def summary(user_id: int):
     session.close()
 
 @analytics_app.command()
-def export_csv(user_id: int, output: str = "entries.csv"):
+def export_csv(
+    user_id: int = typer.Argument(..., help="User ID to export entries for."),
+    output: str = typer.Option("entries.csv", help="Output CSV file name.")
+):
     """Export user's entries to CSV."""
     session = SessionLocal()
     entries = session.query(Entry).filter(Entry.user_id == user_id).all()
     with open(output, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["ID", "Date", "Data", "User ID"])
+        writer.writerow(["ID", "Date", "Food", "Calories", "User ID"])
         for entry in entries:
-            writer.writerow([entry.id, entry.date, entry.data, entry.user_id])
+            writer.writerow([
+                entry.id,
+                entry.date,
+                getattr(entry, 'food', ''),
+                getattr(entry, 'calories', ''),
+                entry.user_id
+            ])
     typer.echo(f"✅ Exported to {output}")
     session.close()
 
 @analytics_app.command()
-def show_chart(user_id: int):
+def show_chart(user_id: int = typer.Argument(..., help="User ID to show entry chart for.")):
     """Display a chart of user's entry data count over time."""
     session = SessionLocal()
     entries = session.query(Entry).filter(Entry.user_id == user_id).all()

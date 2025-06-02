@@ -9,6 +9,9 @@ def add_entry(user_name, food, calories, date):
     if not user:
         print("User not found.")
         return
+    # Convert date string to a Python date object
+    if isinstance(date, str):
+        date = datetime.strptime(date, "%Y-%m-%d").date()
     entry = Entry(user_id=user.id, food=food, calories=calories, date=date)
     db.add(entry)
     db.commit()
